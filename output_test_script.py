@@ -12,6 +12,7 @@ class OutputTestScript(unittest.TestCase):
         self.test_process_name()
 
     def test_process_name(self):
+        '''Test the output log'''
         for line in self.file:
             line = line.strip()
 
@@ -19,6 +20,14 @@ class OutputTestScript(unittest.TestCase):
                 self._test_send_data_log(line)
             elif self._is_data_read_log(line):
                 self._test_data_read_log(line)
+
+    def _represents_int(self, s):
+        '''Check if value is numeric'''
+        try:
+            int(s)
+            return True
+        except ValueError:
+            return False
 
     def _set_values_in_dict(self, match):
         '''keep values as key-valie pair'''
@@ -31,6 +40,8 @@ class OutputTestScript(unittest.TestCase):
             if (count % 2 == 0):
                 key = item
             else:
+                self.assertTrue(self._represents_int(
+                    item), "Value is not Numeric")
                 value = int(item)
                 value_map[key] = value
             count += 1
@@ -38,16 +49,16 @@ class OutputTestScript(unittest.TestCase):
 
     def _is_send_data_log(self, line):
         ''' Check if send data pattern available'''
-        return re.search("\[Send  data: (?:\s*(\w+?)=\s*(-?[0-9]*))*]", line)
+        return re.search("\[Send  data: (?:\s*(\w+?)=\s*(-?\w+?))*]", line)
 
     def _is_data_read_log(self, line):
         # Check if send data pattern available
-        return re.search("\[Data Read: (?:\s*(\w+?):\s*(-?[0-9]*))*]", line)
+        return re.search("\[Data Read: (?:\s*(\w+?):\s*(-?\w+?))*]", line)
 
     def _test_send_data_log(self, line):
         ''' Check if send data pattern available'''
         matches = re.findall(
-            "\[Send  data: (?:\s*(\w+?)=\s*(-?[0-9]*))(?:\s*(\w+?)=\s*(-?[0-9]*))]", line)
+            "\[Send  data: (?:\s*(\w+?)=\s*(-?\w+?))(?:\s*(\w+?)=\s*(-?\w+?))]", line)
         value_map = self._set_values_in_dict(matches)
 
         self.assertTrue("value_1" in value_map, "value_1 is not available")
@@ -59,7 +70,7 @@ class OutputTestScript(unittest.TestCase):
 
     def _test_data_read_log(self, line):
         matches = re.findall(
-            "\[Data Read: (?:\s*(\w+?):\s*(-?[0-9]*))*]", line)
+            "\[Data Read: (?:\s*(\w+?):\s*(-?\w+?))*]", line)
         value_map = self._set_values_in_dict(matches)
         self.assertTrue("Checksum" in value_map, "Checksum is out of range")
         self.assertTrue(0 <= value_map.get("Checksum") <= 2)
