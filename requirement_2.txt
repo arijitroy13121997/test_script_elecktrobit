@@ -1,0 +1,13 @@
+Provided Input files : config.json and output_log.txt 
+Actions:
+1. Run the script as "test_script.py --inputfile config.json --outputfile output_log.txt"
+2. Read the config.json file and assert that the PROCESS_NAME is APP1
+3. Verify the following from the file output_log.txt
+   a. value_1 should range between 50 to 200.
+   b. value_2 should range between 0 to 150
+   c. Checksum should range between 0 to 2.
+
+
+test_script
+
+file.read

@@ -1,0 +1,16 @@
+{
+  "platform": {
+    "os": "windows",
+    "arch": "arm64"
+  },
+  "process": {
+    "env": [
+      "PATH=/usr/bin:/bin",
+      "LIBRARY_PATH=/usr/libraries",
+      "env3=100",
+      "env2=",
+      "env1=200",
+      "PROCESS_NAME=APP1"
+    ]
+  }
+}
